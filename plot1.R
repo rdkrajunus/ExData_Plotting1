@@ -1,20 +1,34 @@
 # Extract the dataset in the HW description to the same directory as this R
-# script.  This script is dependent on the dplyr package, which should be
-# installed prior to running this script.  Install dplyr with:
+# script.  This script is dependent on the lubridate and dplyr packages, which
+# should be installed prior to running this script.  Install lubridate and
+# dplyr with:
+#
 # install.packages("dplyr")
+# install.packages("lubridate")
+
 library(dplyr)
-ssv <- data.frame(read.table(
-    file = "household_power_consumption.txt", header = TRUE, sep = ";",
-    na.strings = c("?")))
+library(lubridate)
 
-GlobalActivePowerFeb1Thru2 <- ssv %>%
+generateColTypes <- function() {
+    types <- rep("NULL", 9)
+    types[1:2] <- "character"
+    types[3] <- "numeric"
+    types
+}
+
+colTypes <- generateColTypes()
+
+ssv <- ssv <- read.table(file = "household_power_consumption.txt",
+                         header = TRUE, sep = ";", na.strings = c("?"),
+                         colClasses = colTypes, nrows=75000)
+
+graphData <- ssv %>%
     filter(Date == "1/2/2007" | Date == "2/2/2007") %>%
-    #mutate(dateTime = as.character(strptime(paste(Date, Time, sep = " "), "%e/%m/%Y %T"))) %>%
-    select(Global_active_power)
+    mutate(dateTime = dmy_hms(paste(Date, Time, sep = " ")))
 
-hist(GlobalActivePowerFeb1Thru2$Global_active_power,
-     xlab = "Global Active Power (kilowatts)", main="Global Active Power",
-     col="red")
+png("plot1.png", 480, 480)
 
-dev.copy(png, "plot1.png", width=480, height=480)
+hist(graphData$Global_active_power, xlab = "Global Active Power (kilowatts)",
+     main="Global Active Power", col="red")
+
 dev.off()

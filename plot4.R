@@ -41,7 +41,7 @@ plot(graphData$dateTime, graphData$Voltage, type = "l", xlab="datetime",
 #lower left
 plot(x=graphData$dateTime, y=graphData$Sub_metering_1, type = "n", xlab="",
      ylab="Energy sub metering")
-legend("topright", lwd = 2, col=c("black", "red", "blue"),
+legend("topright", lty=1, col=c("black", "red", "blue"),
        legend = c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"))
 lines(graphData$dateTime, graphData$Sub_metering_1, type = "l", col = "black")
 lines(graphData$dateTime, graphData$Sub_metering_2, type = "l", col = "red")

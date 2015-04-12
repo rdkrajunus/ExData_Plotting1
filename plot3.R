@@ -24,15 +24,16 @@ ssv <- ssv <- read.table(file = "household_power_consumption.txt",
 
 graphData <- ssv %>%
     filter(Date == "1/2/2007" | Date == "2/2/2007") %>%
-    mutate(dateTime = dmy_hms(paste(Date, Time, sep = " "))) %>%
-    select(dateTime, Sub_metering_1, Sub_metering_2, Sub_metering_3)
+    mutate(dateTime = dmy_hms(paste(Date, Time, sep = " ")))
 
 png("plot3.png", 480, 480)
+
 plot(x=graphData$dateTime, y=graphData$Sub_metering_1, type = "n", xlab="",
      ylab="Energy sub metering")
-legend("topright", lwd = 2, col=c("black", "red", "blue"),
+legend("topright", lty=1, col=c("black", "red", "blue"),
        legend = c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"))
 lines(graphData$dateTime, graphData$Sub_metering_1, type = "l", col = "black")
 lines(graphData$dateTime, graphData$Sub_metering_2, type = "l", col = "red")
 lines(graphData$dateTime, graphData$Sub_metering_3, type = "l", col = "blue")
+
 dev.off()
